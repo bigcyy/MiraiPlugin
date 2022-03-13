@@ -72,9 +72,9 @@ public class BaseEventHandler extends SimpleListenerHost {
      *              删除推送子群事件：群里发送：“删除推送子群：xxxxx”
      *              查看推送子群事件：群里发送：“查看推送子群”
      *          推送到个人配置：
-     *              添加推送个人事件：私聊机器人发送：“添加推送个人:xxxxx”
-     *              添加推送个人事件：群里发送：“删除推送个人：xxxxx”
-     *              添加推送个人事件：群里发送：“查看推送个人”
+     *              添加推送个人事件：私聊机器人发送：“添加推送好友:xxxxx”
+     *              添加推送个人事件：群里发送：“删除推送好友：xxxxx”
+     *              添加推送个人事件：群里发送：“查看推送好友”
      *
      *      使用方法功能:
      *          查看食用方法事件: 群里发送：”使用方法“
@@ -110,34 +110,40 @@ public class BaseEventHandler extends SimpleListenerHost {
                 secondEventHandler.receiveCode(group,groupMessageEvent.getSender(),content);
             }
         }
-
+        /*
+            使用方法功能
+         */
         if(content.equals("使用方法")&& sender.getId() != Plugin.MY_BOT.getId()){
             secondEventHandler.useMethod(group);
         }
 
         /*
-            信息推送功能
+            群推送功能
          */
-        if(MyPluginConfig.isPushMsg && sender.getId() != Plugin.MY_BOT.getId() && sender.getPermission().getLevel() == 1){
+        if(MyPluginConfig.isPushMsg && sender.getId() != Plugin.MY_BOT.getId()){
 
             long groupId = group.getId();
             long senderId = sender.getId();
             String key = String.format(MyPluginConfig.pushMsgTimerKey,groupId,senderId);   //推送信息计时器
+
             if(RedislUtil.get(key) != null && !content.equals("结束推送")){
+                //从redis中获取是否已经开启批量推送，如果开启再判断信息内容是不是结束推送，不是结束推送则将信息进行推送
                 if(content.equals("开始推送")){
+                    //已经在推送，再次批量推送则发出警告
                     group.sendMessage(ReplyMessage.rePushMsg);
                     return;
                 }
+                //进行信息推送
                 secondEventHandler.pushSomeMsg(group, message);
                 return;
             }
-            //820315251
-            if(content.startsWith("添加子群:")){
-                secondEventHandler.addPushGroup(group,sender,content);
-            }else if(content.startsWith("删除子群:")){
-                secondEventHandler.deletePushGroup(group,sender,content);
-            }else if(content.startsWith("查看子群")){
-                secondEventHandler.getPushGroup(group,sender);
+
+            if(content.startsWith("添加推送子群:") || content.startsWith("添加推送好友:")){
+                secondEventHandler.addPushObj(group,sender.getId(),content);    //添加推送对象
+            }else if(content.startsWith("删除推送子群:") || content.startsWith("删除推送好友:")){
+                secondEventHandler.deletePushObj(group,sender.getId(),content);
+            }else if(content.startsWith("查看推送目标")){
+                secondEventHandler.getAllPushObj(group,sender.getId());
             }else if(content.equals("开始推送")){
                 secondEventHandler.beginPushSomeMsg(group,sender);
             }else if(message.contains(AtAll.INSTANCE)){
@@ -163,23 +169,34 @@ public class BaseEventHandler extends SimpleListenerHost {
      *              删除推送子群事件：私聊机器人发送：“删除推送子群：xxxxx”
      *              查看推送子群事件：私聊机器人发送：“查看推送子群”
      *          推送到个人配置:
-     *              添加推送个人事件：私聊机器人发送：“添加推送个人:xxxxx”
-     *              添加推送个人事件：私聊机器人发送：“删除推送个人：xxxxx”
-     *              添加推送个人事件：私聊机器人发送：“查看推送个人”
+     *              添加推送个人事件：私聊机器人发送：“添加推送好友:xxxxx”
+     *              添加推送个人事件：私聊机器人发送：“删除推送好友：xxxxx”
+     *              添加推送个人事件：私聊机器人发送：“查看推送好友”
      *
      * @param friendMessageEvent 好友信息事件对象
      */
     @EventHandler
     public void onFriendMessageEvent(FriendMessageEvent friendMessageEvent) throws SchedulerException {
-        String msg = friendMessageEvent.getMessage().contentToString();
+        String content = friendMessageEvent.getMessage().contentToString();
+        Friend friend = friendMessageEvent.getFriend();
+        Friend sender = friendMessageEvent.getSender();
         //仅bot主人可以执行命令
-        if(friendMessageEvent.getSender().getId() == MyPluginConfig.master && msg.startsWith("/")){
+        if(friendMessageEvent.getSender().getId() == MyPluginConfig.master && content.startsWith("/")){
             secondEventHandler.executeCmd(friendMessageEvent);
-        }else if(friendMessageEvent.getSender().getId() == MyPluginConfig.master && msg.startsWith("开启")){
-            secondEventHandler.openFunction(friendMessageEvent.getSender(),msg);
+        }else if(friendMessageEvent.getSender().getId() == MyPluginConfig.master && content.startsWith("开启")){
+            secondEventHandler.openFunction(friendMessageEvent.getSender(),content);
         }
-        else if(friendMessageEvent.getSender().getId() == MyPluginConfig.master && msg.startsWith("关闭")){
-            secondEventHandler.closeFunction(friendMessageEvent.getSender(),msg);
+        else if(friendMessageEvent.getSender().getId() == MyPluginConfig.master && content.startsWith("关闭")){
+            secondEventHandler.closeFunction(friendMessageEvent.getSender(),content);
+        }
+        if(MyPluginConfig.isPushMsg && sender.getId() != Plugin.MY_BOT.getId()) {
+            if (content.startsWith("添加推送子群:") || content.startsWith("添加推送好友:")) {
+                secondEventHandler.addPushObj(friend, sender.getId(), content);    //添加推送对象
+            } else if (content.startsWith("删除推送子群:") || content.startsWith("删除推送好友:")) {
+                secondEventHandler.deletePushObj(friend, sender.getId(), content);
+            } else if (content.startsWith("查看推送目标")) {
+                secondEventHandler.getAllPushObj(friend, sender.getId());
+            }
         }
 
     }

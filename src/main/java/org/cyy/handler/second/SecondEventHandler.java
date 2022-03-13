@@ -40,7 +40,7 @@ import java.util.stream.Stream;
 /**
  * @author cyy
  * @date 2022/2/16 14:38
- * @description 二级事件处理
+ * @description 对功能的事件进行处理
  */
 public class SecondEventHandler {
     /**
@@ -310,43 +310,74 @@ public class SecondEventHandler {
     }
 
     /**
-     * 添加推送子群处理器
-     * @param group 主群
-     * @param sender  发送者
+     * 添加推送对象事件处理器
+     * @param contact 对话，用于获取信息推送者id
+     * @param senderId  发送者
      * @param content   信息内容
      */
-    public void addPushGroup(Group group, Member sender, String content) {
+    public void addPushObj(Contact contact, long senderId, String content) {
         PushMsgService pushMsgService = new PushMsgService();
-        long groupId = group.getId();
+        long pushMsgObjId = contact.getId();  //信息推送者的id
         String[] split = content.split(":");    //处理添加的内容
-        String message = pushMsgService.addPushGroup(String.valueOf(groupId), split[1]);
-        group.sendMessage(new At(sender.getId()).plus(message));
+        String message = "";
+        if("添加推送子群".equals(split[0])) {
+            //添加子群
+            message = pushMsgService.addPushGroup(String.valueOf(pushMsgObjId), split[1]);
+        }
+        else if("添加推送好友".equals(split[0])) {
+            //添加个人
+            message = pushMsgService.addPushPerson(String.valueOf(pushMsgObjId), split[1]);
+        }
+        sendAtOrNormalMessage(contact,senderId,message);
     }
 
     /**
-     * 删除推送的子群
-     * @param group 主群
-     * @param sender    发送者
+     * 删除推送对象事件处理器
+     * @param contact 对话，用于获取信息推送者id
+     * @param senderId    发送者
      * @param content   信息内容
      */
-    public void deletePushGroup(Group group, Member sender, String content) {
+    public void deletePushObj(Contact contact, long senderId, String content) {
         PushMsgService pushMsgService = new PushMsgService();
-        long groupId = group.getId();
-        String[] split = content.split(":");    //处理添加的内容
-        String message = pushMsgService.deletePushGroup(String.valueOf(groupId), split[1]);
-        group.sendMessage(new At(sender.getId()).plus(message));
+        long pushMsgObjId = contact.getId();
+        String[] split = content.split(":");    //处理删除的内容
+        String message = "";
+        if("删除推送子群".equals(split[0])) {
+            //删除子群
+            message = pushMsgService.deletePushGroup(String.valueOf(pushMsgObjId), split[1]);
+        }
+        else if("删除推送好友".equals(split[0])) {
+            //删除个人
+            message = pushMsgService.deletePushPerson(String.valueOf(pushMsgObjId), split[1]);
+        }
+        sendAtOrNormalMessage(contact,senderId,message);
     }
 
     /**
      * 获取所有子群处理器
-     * @param group 主群
-     * @param sender 发送者
+     * @param contact 对话，用于获取信息推送者id
+     * @param senderId 发送者
      */
-    public void getPushGroup(Group group, Member sender)  {
+    public void getAllPushObj(Contact contact, long senderId)  {
         PushMsgService pushMsgService = new PushMsgService();
-        long groupId = group.getId();
-        String allChildGroup = pushMsgService.getAllChildGroup(String.valueOf(groupId));
-        group.sendMessage(new At(sender.getId()).plus(allChildGroup));
+        long pushMsgObjId = contact.getId();
+        String allChild = pushMsgService.getAllChild(String.valueOf(pushMsgObjId));
+        sendAtOrNormalMessage(contact,senderId,allChild);
+    }
+
+    /**
+     * 根据聊天环境，判断是否需要发送at信息
+     * @param contact 聊天环境
+     * @param atId 如果为群需要at的id
+     * @param msg 发送的信息
+     */
+    private void sendAtOrNormalMessage(Contact contact,long atId,String msg){
+        if(contact instanceof Group) {
+            contact.sendMessage(new At(atId).plus(msg));
+        }
+        else if(contact instanceof Friend) {
+            contact.sendMessage(msg);
+        }
     }
 
     /**

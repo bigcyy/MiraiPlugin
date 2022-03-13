@@ -8,33 +8,16 @@ import java.util.List;
  * @description 推送信息对象
  */
 public class PushMsgObj {
-    private int num;    //有多少个子群
-    private String groupId; //群id
+    private String pushMsgObjId; //信息推送对象id
     private List<String> childGroupId;  //子群集合
+    private List<String> childPersonId; //个人集合
 
-    public PushMsgObj() {
+    public String getPushMsgObjId() {
+        return pushMsgObjId;
     }
 
-    public PushMsgObj(int num, String groupId, List<String> childGroupId) {
-        this.num = num;
-        this.groupId = groupId;
-        this.childGroupId = childGroupId;
-    }
-
-    public int getNum() {
-        return num;
-    }
-
-    public void setNum(int num) {
-        this.num = num;
-    }
-
-    public String getGroupId() {
-        return groupId;
-    }
-
-    public void setGroupId(String groupId) {
-        this.groupId = groupId;
+    public void setPushMsgObjId(String pushMsgObjId) {
+        this.pushMsgObjId = pushMsgObjId;
     }
 
     public List<String> getChildGroupId() {
@@ -45,12 +28,11 @@ public class PushMsgObj {
         this.childGroupId = childGroupId;
     }
 
-    @Override
-    public String toString() {
-        return "PushMsgObj{" +
-                "num=" + num +
-                ", groupId='" + groupId + '\'' +
-                ", childGroupId=" + childGroupId +
-                '}';
+    public List<String> getChildPersonId() {
+        return childPersonId;
+    }
+
+    public void setChildPersonId(List<String> childPersonId) {
+        this.childPersonId = childPersonId;
     }
 }

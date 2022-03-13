@@ -43,13 +43,18 @@ public interface ReplyMessage {
         推送信息相关
      */
     String childGroupNotFindMsg = "机器人未添加该群%s,请先邀请机器人进群再添加！";
+    String childPersonNotFindMsg = "机器人未添加该好友%s,请先让该用户添加机器人为好友再添加！";
+
     String repeatAddChildGroupMsg = "请勿重复添加子群！";
-    String addChildGroupSuccessMsg = "添加成功！";
-    String deleteChildGroupUnSuccessMsg = "删除失败，未配置子群！";
-    String deleteChildGroupSuccessMsg = "删除成功!";
-    String noChildGroupMsg = "还没有子群。";
-    String childGroupMsg = "本群的子群有:\n%s";
-    String rePushMsg = "正在推送，请勿重复发送指令.";;
+    String repeatAddChildPersonMsg = "请勿重复添加个人！";
+    String addChildSuccessMsg = "添加成功！";
+
+    String deleteChildUnSuccessMsg = "删除失败，未配置任何子群和个人！";
+    String deleteChildSuccessMsg = "删除成功!";
+
+    String noChildMsg = "还没有子群和个人。";
+    String allChildMsg = "可以推送的目标有:\n群:\n%s好友:\n%s";
+    String rePushMsg = "正在推送，请勿重复发送指令.";
     String beginPushMsg = "ok,请发送消息，发送完成后回复“结束推送”,结束转发";
     String endPushIsOkMsg = "ok";
     String pushMsgPrefix = "来自群(%s)的消息:\n";

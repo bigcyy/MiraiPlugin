@@ -69,7 +69,7 @@ public class MyPluginConfig {
         baseCookie = YmlAndPropUtil.getValue(properties, "baseCookie");
         isAutoSign = Boolean.parseBoolean(YmlAndPropUtil.getValue(properties, "isAutoSign","false"));
         isSign = Boolean.parseBoolean(YmlAndPropUtil.getValue(properties, "isSign","false"));
-        isPushMsg = Boolean.parseBoolean(YmlAndPropUtil.getValue(properties, "isAutoNotice","false"));
+        isPushMsg = Boolean.parseBoolean(YmlAndPropUtil.getValue(properties, "isPushMsg","false"));
         isLogin = Boolean.parseBoolean(YmlAndPropUtil.getValue(properties, "isLogin","false"));
         agreeAddFriend = Boolean.parseBoolean(YmlAndPropUtil.getValue(properties,"agreeAddFriend","false"));
         agreeAddGroup = Boolean.parseBoolean(YmlAndPropUtil.getValue(properties,"agreeAddGroup","false"));
