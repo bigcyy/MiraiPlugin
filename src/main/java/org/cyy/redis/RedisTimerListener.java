@@ -1,5 +1,6 @@
 package org.cyy.redis;
 
+import net.mamoe.mirai.contact.Friend;
 import net.mamoe.mirai.contact.Group;
 import net.mamoe.mirai.message.data.At;
 import net.mamoe.mirai.utils.MiraiLogger;
@@ -38,13 +39,17 @@ public class RedisTimerListener extends JedisPubSub {
     @Override
     public void onMessage(String channel, String message) {
         logger.info("message");
-        if(message.startsWith("pushMsgTimer")){
+        if(message.startsWith(MyPluginConfig.pushMsgTimerKeyPrefix)){
             String[] split = message.split(":");
             Group group = Plugin.MY_BOT.getGroup(Long.parseLong(split[1]));
-            if(group == null){
+            Friend friend = Plugin.MY_BOT.getFriend(Long.parseLong(split[1]));
+            if(group == null && friend == null){
                 return;
             }
-            group.sendMessage(new At(Long.parseLong(split[2])).plus("操作超时，以上消息已经推送，信息推送自动结束"));
+            if(group != null)
+                group.sendMessage(new At(Long.parseLong(split[2])).plus(ReplyMessage.pushMsgTimeoutMsg));
+            else
+                friend.sendMessage(ReplyMessage.pushMsgTimeoutMsg);
         }
         else if(message.startsWith(MyPluginConfig.loginTimerKeyPreFix)){
             //如果过期的是登录计时器key

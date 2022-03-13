@@ -273,40 +273,92 @@ public class SecondEventHandler {
      * @param message 待推送的内容
      */
     public void pushAtAllMsg(Group group, Member sender, String message) {
-        PushMsgObj pushMsgObj = new PushMsgObjDao().getPushMsgObjByFile(String.valueOf(group.getId())); //从文件中获取子群·
+        PushMsgObj pushMsgObj = new PushMsgObjDao().getPushMsgObjByFile(String.valueOf(group.getId())); //从文件中获取信息推送者·
         if(checkNotCanPushMsg(pushMsgObj)){
             return;
         }
+        /*
+            向群推送信息
+         */
         ArrayList<String> groups = new ArrayList<>();   //用于记录推送成功的群的群名称
         ArrayList<String> unSucGroups = new ArrayList<>(); //用于记录未推送成功的群的群号
-        pushMsgObj.getChildGroupId().forEach((groupId)->{   //遍历每一个子群
-            Group pushGroup = Plugin.MY_BOT.getGroup(Long.parseLong(groupId));  //从机器人群列表中中查找子群
-            if(pushGroup!=null) {   //子群查找到了才进行推送
-                pushGroup.sendMessage(new PlainText(String.format(ReplyMessage.pushMsgPrefix,pushGroup.getName())).plus(message));
-                groups.add(pushGroup.getName());
-            }else{  //没有查到该群
-                unSucGroups.add(groupId);
-            }
-        });
-        /*
-            推送成功的群
-         */
-        StringBuilder builder = new StringBuilder();    //构造推送成功的string字符串
-        groups.forEach((groupName)->{   //开始构造
-            builder.append(groupName).append("\n");
-        });
-        group.sendMessage(new At(sender.getId()).plus(String.format(ReplyMessage.pushMsgOkMsg,builder)));
-        /*
-            推送失败的群
-         */
-        if(!unSucGroups.isEmpty()){
-            StringBuilder unSucBuilder = new StringBuilder();    //构造推送失败的string字符串
-            unSucGroups.forEach((groupName)->{   //开始构造
-                unSucBuilder.append(groupName).append("\n");
+
+        if(pushMsgObj.getChildGroupId() != null) {  //防止空指针
+            pushMsgObj.getChildGroupId().forEach((groupId) -> {   //遍历每一个子群
+                Group pushGroup = Plugin.MY_BOT.getGroup(Long.parseLong(groupId));  //从机器人群列表中中查找子群
+                if (pushGroup != null) {   //子群查找到了才进行推送
+                    pushGroup.sendMessage(new PlainText(String.format(ReplyMessage.pushMsgSuccessPrefixMsg, "群",pushGroup.getName(),groupId)).plus(message));
+                    groups.add(pushGroup.getName());
+                } else {  //没有查到该群
+                    unSucGroups.add(groupId);
+                }
             });
-            group.sendMessage(ReplyMessage.pushMsgNotOkMsg+unSucBuilder);
         }
 
+        /*
+         *向个人推送信息
+         */
+        ArrayList<String> persons = new ArrayList<>();   //用于记录推送成功的好友的好友名称
+        ArrayList<String> unSucPersons = new ArrayList<>(); //用于记录未推送成功的好友的帐号
+
+        if(pushMsgObj.getChildPersonId() != null) {  //防止空指针
+            pushMsgObj.getChildPersonId().forEach((personId) -> {   //遍历每一个推送好友
+                Friend pushPerson = Plugin.MY_BOT.getFriend(Long.parseLong(personId));  //从机器人好友列表中中查找好友
+                if (pushPerson != null) {   //查找到了才进行推送
+                    pushPerson.sendMessage(new PlainText(String.format(ReplyMessage.pushMsgSuccessPrefixMsg,"好友", pushPerson.getNick(),personId)).plus(message));
+                    persons.add(pushPerson.getNick());
+                } else {  //没有查到该好友
+                    unSucPersons.add(personId);
+                }
+            });
+        }
+
+        /*
+            回复推送成功的群
+         */
+        StringBuilder builder = new StringBuilder();    //构造推送成功的string字符串
+        builder.append("群:\n");
+        createPushMsgAimBody(groups,builder);
+        /*
+            回复推送成功的好友
+         */
+        builder.append("好友:\n");
+        createPushMsgAimBody(persons,builder);
+        group.sendMessage(new At(sender.getId()).plus(String.format(ReplyMessage.pushMsgOkMsg,builder)));
+
+        /*
+            回复推送失败的群和好友
+         */
+        if(!unSucGroups.isEmpty() || !unSucPersons.isEmpty()){
+            StringBuilder pushMsgGroupBody = createPushMsgAimBody(unSucGroups);
+            StringBuilder pushMsgPersonBody = createPushMsgAimBody(unSucPersons);
+            group.sendMessage(ReplyMessage.pushMsgNotOkMsg+pushMsgGroupBody+pushMsgPersonBody);
+        }
+
+    }
+
+
+
+    /**
+     * 成功推送信息后，构造通知推送成功的目标或者失败的目标的工具
+     * @param bodyList 等待构造的集合
+     */
+    private StringBuilder createPushMsgAimBody(ArrayList<String> bodyList){
+        StringBuilder builder = new StringBuilder();
+        bodyList.forEach((body)->{   //开始构造
+            builder.append(body).append("\n");
+        });
+        return builder;
+    }
+
+    /**
+     * 成功推送信息后，构造通知推送成功的目标或者失败的目标的工具
+     * @param bodyList 等待构造的集合
+     */
+    private void createPushMsgAimBody(ArrayList<String> bodyList,StringBuilder builder){
+        bodyList.forEach((body)->{   //开始构造
+            builder.append(body).append("\n");
+        });
     }
 
     /**
@@ -354,7 +406,7 @@ public class SecondEventHandler {
     }
 
     /**
-     * 获取所有子群处理器
+     * 获取所有子群事件处理器
      * @param contact 对话，用于获取信息推送者id
      * @param senderId 发送者
      */
@@ -382,22 +434,22 @@ public class SecondEventHandler {
 
     /**
      * 开始批量推送信息处理
-     * @param group 待推送的主群
-     * @param sender 发送者
+     * @param contact 聊天环境
+     * @param atId 如果为群需要at的id
      */
-    public void beginPushSomeMsg(Group group, Member sender) {
+    public void beginPushSomeMsg(Contact contact, long senderId) {
 
-        PushMsgObj pushMsgObj = new PushMsgObjDao().getPushMsgObjByFile(String.valueOf(group.getId())); //从文件中获取子群·
+        PushMsgObj pushMsgObj = new PushMsgObjDao().getPushMsgObjByFile(String.valueOf(contact.getId())); //从文件中获取子群·
         if(checkNotCanPushMsg(pushMsgObj)){
             return;
         }
-        String key = String.format(MyPluginConfig.pushMsgTimerKey,group.getId(),sender.getId());
+        String key = String.format(MyPluginConfig.pushMsgTimerKey,contact.getId(),senderId);
         RedislUtil.setEx(key, key, MyPluginConfig.pushMsgExTime);
-        group.sendMessage(new At(sender.getId()).plus(ReplyMessage.beginPushMsg));
+        sendAtOrNormalMessage(contact,senderId,ReplyMessage.beginPushMsg);
     }
 
     /**
-     * 判断是否能推送信息，该群是否有子群
+     * 判断是否能推送信息，该群是否有可推送对象(子群，好友)
      * @param pushMsgObj 推送信息的配置对象
      * @return 是否能推送信息,返回true表示不能,false表示能
      */
@@ -407,26 +459,28 @@ public class SecondEventHandler {
             //该群没有配置推送信息
             return true;
         }
-        if(pushMsgObj.getChildGroupId() == null){
+        if(pushMsgObj.getChildGroupId() == null && pushMsgObj.getChildPersonId() == null){
             //该群没有配置推送群
             return true;
         }
-        return pushMsgObj.getChildGroupId().size() == 0;    //该群没有配置推送群
+        return pushMsgObj.getChildGroupId().size() == 0 && pushMsgObj.getChildPersonId().size() == 0;    //该群没有配置推送群
 
     }
 
-    public void pushSomeMsg(Group group, MessageChain message) {
-        PushMsgObj pushMsgObj = new PushMsgObjDao().getPushMsgObjByFile(String.valueOf(group.getId()));
-        boolean isFileMsg = message.stream().anyMatch((singleMessage) -> singleMessage instanceof FileMessage); //判断是否是文件信息
+    public void pushSomeMsg(Contact contact, MessageChain message) {
+        PushMsgObj pushMsgObj = new PushMsgObjDao().getPushMsgObjByFile(String.valueOf(contact.getId()));   //获取推送信息者
+
         Stream<String> filterStream = pushMsgObj.getChildGroupId().stream().filter((groupId) -> {   //先进行过滤
             return Plugin.MY_BOT.getGroup(Long.parseLong(groupId)) != null;  //从bot中查询到该群
         }); //过滤后的流，方便下面群发信息
-        if (isFileMsg) { //如果是文件
-            Optional<SingleMessage> first = message.stream().filter((singleMessage) -> singleMessage instanceof FileMessage).findFirst();
+
+        if (isFileMsg && contact instanceof Group) { //如果是文件
+            Group group = (Group) contact;
+            Optional<SingleMessage> first = message.stream().filter((singleMessage) -> singleMessage instanceof FileMessage).findFirst();   //找到文件信息
             SingleMessage singleMessage;
             if(first.isPresent()) { //stream流的非空判断
                 singleMessage = first.get();    //获取文件信息
-                AbsoluteFile absoluteFile = ((FileMessage) singleMessage).toAbsoluteFile(group);    //从刚刚发送文件的的群里获取该文件
+                AbsoluteFile absoluteFile = ((FileMessage) singleMessage).toAbsoluteFile();    //从刚刚发送文件的的群里获取该文件
                 String fileName = absoluteFile.getName();   //获取到文件名
                 String url = absoluteFile.getUrl(); //得到文件url
                 OkHttpClient okHttpClient = new OkHttpClient(); //用okhttp发送请求，转成流
@@ -472,17 +526,29 @@ public class SecondEventHandler {
 
     }
 
+    private pushOneMsg(){
+
+    }
+    private void pushOneMsgToPerson(Contact contact,MessageChain message){
+
+
+    }
+
+    private void pushOneMsgToGroup(){
+
+    }
+
+
     /**
-     *
      * 结束推送信息处理
-     * @param group 群
-     * @param sender 发送者
+     * @param contact 聊天环境
+     * @param senderId 发送者id
      */
-    public void endPushSomMsg(Group group,Member sender) {
-        String key = String.format(MyPluginConfig.pushMsgTimerKey,group.getId(),sender.getId());
+    public void endPushSomMsg(Contact contact,long senderId) {
+        String key = String.format(MyPluginConfig.pushMsgTimerKey,contact.getId(),senderId);
         Long del = RedislUtil.del(key);
         if(del != 0) {
-            group.sendMessage(new At(sender.getId()).plus(ReplyMessage.endPushIsOkMsg));
+            sendAtOrNormalMessage(contact,senderId,ReplyMessage.endPushIsOkMsg);
         }
     }
 

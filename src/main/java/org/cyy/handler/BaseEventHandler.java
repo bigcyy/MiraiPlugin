@@ -122,8 +122,8 @@ public class BaseEventHandler extends SimpleListenerHost {
          */
         if(MyPluginConfig.isPushMsg && sender.getId() != Plugin.MY_BOT.getId()){
 
-            long groupId = group.getId();
-            long senderId = sender.getId();
+            long groupId = group.getId();   //获取群id
+            long senderId = sender.getId(); //获取发送信息者id
             String key = String.format(MyPluginConfig.pushMsgTimerKey,groupId,senderId);   //推送信息计时器
 
             if(RedislUtil.get(key) != null && !content.equals("结束推送")){

@@ -52,6 +52,7 @@ public class MyPluginConfig {
     public static boolean isPushMsg;    //是否启用信息推送
     //public static int
     public static String pushMsgTimerKey = "pushMsgTimer:%s:%s";    //推送信息计时器key
+    public static String pushMsgTimerKeyPrefix = "pushMsgTimer";    //推送信息计时器key
     public static int pushMsgExTime = 60;   //推送信息超时
     /*
         其他配置

@@ -57,9 +57,11 @@ public interface ReplyMessage {
     String rePushMsg = "正在推送，请勿重复发送指令.";
     String beginPushMsg = "ok,请发送消息，发送完成后回复“结束推送”,结束转发";
     String endPushIsOkMsg = "ok";
-    String pushMsgPrefix = "来自群(%s)的消息:\n";
-    String pushMsgOkMsg = "已经向以下群：\n%s成功推送消息";
-    String pushMsgNotOkMsg = "机器人未加入一下群,推送失败：\n";
+
+    String pushMsgSuccessPrefixMsg = "来自%s(%s:%s)的消息:\n";
+    String pushMsgOkMsg = "已经向以下推送目标：\n%s成功推送消息";
+    String pushMsgNotOkMsg = "机器人未加以下群或好友,推送失败：\n";
+    String pushMsgTimeoutMsg = "操作超时，以上消息已经推送，信息推送自动结束";
     /*
         缓存相关
      */
