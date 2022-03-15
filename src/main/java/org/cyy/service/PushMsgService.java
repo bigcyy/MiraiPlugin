@@ -122,7 +122,7 @@ public class PushMsgService {
 
     /**
      * 删除推送子群
-     * @param pushMsgObjId   信息推送对象id
+     * @param pushMsgObjId   信息推送者id
      * @param childGroupId  待删除子群id
      * @return  成功还是失败的信息
      */
@@ -130,7 +130,7 @@ public class PushMsgService {
         PushMsgObj pushMsgObj;
         pushMsgObj = pushMsgObjDao.getPushMsgObjByFile(String.valueOf(pushMsgObjId));
         if(pushMsgObj == null){ //不存在信息推送者
-            return ReplyMessage.deleteChildUnSuccessMsg;
+            return ReplyMessage.notAnyChildMsg;
         }
         List<String> childGroupIds = pushMsgObj.getChildGroupId();
         boolean remove = childGroupIds.remove(childGroupId);

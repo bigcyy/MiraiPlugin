@@ -45,11 +45,12 @@ public interface ReplyMessage {
     String childGroupNotFindMsg = "机器人未添加该群%s,请先邀请机器人进群再添加！";
     String childPersonNotFindMsg = "机器人未添加该好友%s,请先让该用户添加机器人为好友再添加！";
 
-    String repeatAddChildGroupMsg = "请勿重复添加子群！";
-    String repeatAddChildPersonMsg = "请勿重复添加个人！";
+    String repeatAddChildGroupMsg = "请勿重复添加推送子群！";
+    String repeatAddChildPersonMsg = "请勿重复添加推送好友！";
     String addChildSuccessMsg = "添加成功！";
 
-    String deleteChildUnSuccessMsg = "删除失败，未配置任何子群和个人！";
+    String notAnyChildMsg = "未配置任何子群和个人！";
+    String deleteChildUnSuccessMsg = "删除失败!";
     String deleteChildSuccessMsg = "删除成功!";
 
     String noChildMsg = "还没有子群和个人。";
@@ -58,8 +59,8 @@ public interface ReplyMessage {
     String beginPushMsg = "ok,请发送消息，发送完成后回复“结束推送”,结束转发";
     String endPushIsOkMsg = "ok";
 
-    String pushMsgSuccessPrefixMsg = "来自%s(%s:%s)的消息:\n";
-    String pushMsgOkMsg = "已经向以下推送目标：\n%s成功推送消息";
+    String pushMsgSuccessPrefixMsg = "来自%s的消息:\n"; //%s(%s:%s)
+    String pushMsgOkMsg = "已经成功推送到：\n%s";
     String pushMsgNotOkMsg = "机器人未加以下群或好友,推送失败：\n";
     String pushMsgTimeoutMsg = "操作超时，以上消息已经推送，信息推送自动结束";
     /*
