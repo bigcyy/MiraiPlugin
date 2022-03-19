@@ -513,10 +513,10 @@ public class SecondEventHandler {
     /**
      * 戳一戳机器人显示使用方法处理
      * @param subject 会话
-     * @param from  谁戳一戳机器人
      */
-    public void showUseMethod(Contact subject, UserOrBot from) {
-        subject.sendMessage(new At(from.getId()).plus(ReplyMessage.useMethodMsg));
+    public void showUseMethod(Contact subject, String msg) {
+        //subject.sendMessage(new At(from.getId()).plus(ReplyMessage.useMethodMsg));
+        subject.sendMessage(msg);
     }
 
 }

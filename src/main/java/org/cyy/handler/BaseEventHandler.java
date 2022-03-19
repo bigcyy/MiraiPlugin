@@ -96,6 +96,8 @@ public class BaseEventHandler extends SimpleListenerHost {
             if(content.equals("催签到")){
                 //催签到事件
                 secondEventHandler.sign(group);
+            }else if(content.equals("催签到介绍")){
+                secondEventHandler.showUseMethod(group,ReplyMessage.signUseMethodMsg);
             }
         }
 
@@ -115,7 +117,7 @@ public class BaseEventHandler extends SimpleListenerHost {
             使用方法功能
          */
         if(content.equals("使用方法")&& sender.getId() != Plugin.MY_BOT.getId()){
-            secondEventHandler.useMethod(group);
+            secondEventHandler.showUseMethod(group,ReplyMessage.newUseMethodMsg);
         }
 
         /*
@@ -153,6 +155,8 @@ public class BaseEventHandler extends SimpleListenerHost {
                 secondEventHandler.beginPushSomeMsg(group,senderId);
             }else if(message.contains(AtAll.INSTANCE)){
                 secondEventHandler.pushAtAllMsg(group,sender,content);
+            }else if(content.equals("信息推送功能介绍")){
+                secondEventHandler.showUseMethod(group,ReplyMessage.pushMsgUseMethodMsg);
             }
         }
 
@@ -187,10 +191,20 @@ public class BaseEventHandler extends SimpleListenerHost {
             secondEventHandler.executeCmd(friendMessageEvent);
         }else if(friendMessageEvent.getSender().getId() == MyPluginConfig.master && content.startsWith("开启")){
             secondEventHandler.openFunction(friendMessageEvent.getSender(),content);
-        }
-        else if(friendMessageEvent.getSender().getId() == MyPluginConfig.master && content.startsWith("关闭")){
+        } else if(friendMessageEvent.getSender().getId() == MyPluginConfig.master && content.startsWith("关闭")){
             secondEventHandler.closeFunction(friendMessageEvent.getSender(),content);
         }
+        /*
+            好友中的使用方法介绍
+         */
+        if(content.equals("使用方法")){
+            secondEventHandler.showUseMethod(friend,ReplyMessage.newUseMethodMsg);
+        }else if(content.equals("催签到介绍")){
+            secondEventHandler.showUseMethod(friend,ReplyMessage.signUseMethodMsg);
+        }
+        /*
+            信息推送功能
+         */
         if(MyPluginConfig.isPushMsg && sender.getId() != Plugin.MY_BOT.getId()) {
             long senderId = sender.getId();   //获取信息发送者id
             String key = String.format(MyPluginConfig.pushMsgTimerKey,senderId,senderId);   //推送信息计时器
@@ -219,6 +233,8 @@ public class BaseEventHandler extends SimpleListenerHost {
                 secondEventHandler.getAllPushObj(friend, sender.getId());
             }else if(content.equals("开始推送")){
                 secondEventHandler.beginPushSomeMsg(friend,senderId);
+            }else if(content.equals("信息推送介绍")){
+                secondEventHandler.showUseMethod(friend,ReplyMessage.pushMsgUseMethodMsg);
             }
         }
 
@@ -285,7 +301,6 @@ public class BaseEventHandler extends SimpleListenerHost {
             return;
         }
         Contact subject = botNudgedEvent.getSubject();
-        UserOrBot from = botNudgedEvent.getFrom();
-        secondEventHandler.showUseMethod(subject,from);
+        secondEventHandler.showUseMethod(subject,ReplyMessage.newUseMethodMsg);
     }
 }
