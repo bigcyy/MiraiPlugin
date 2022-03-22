@@ -132,7 +132,7 @@ public class PushMsg {
                                 unSucGroups.add(groupId);
                             } finally {
                                 //关闭流
-                                YmlAndPropUtil.closeResource(inputStream, null);
+                                YmlAndPropAndIOUtil.closeResource(inputStream, null);
                             }
                         }
                     });

@@ -1,7 +1,7 @@
 package org.cyy.redis;
 
 import org.cyy.config.MyPluginConfig;
-import org.cyy.utils.YmlAndPropUtil;
+import org.cyy.utils.YmlAndPropAndIOUtil;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
@@ -33,14 +33,14 @@ public class RedisPool {
     }
 
     public static void load(){
-        Properties properties = YmlAndPropUtil.loadProperties(MyPluginConfig.redisConfigPath);
-        maxTotal = Integer.parseInt(YmlAndPropUtil.getValue(properties,"redis.max.total","5"));
-        maxIdle = Integer.parseInt(YmlAndPropUtil.getValue(properties,"redis.max.idle","3"));
-        minIdle = Integer.parseInt(YmlAndPropUtil.getValue(properties,"redis.min.idle","2"));
-        redisIp = YmlAndPropUtil.getValue(properties,"redis.ip","127.0.0.1");
-        redisPort = Integer.parseInt(YmlAndPropUtil.getValue(properties,"redis.port","6379"));
-        username = YmlAndPropUtil.getValue(properties,"redis.username");
-        password = YmlAndPropUtil.getValue(properties,"redis.password");
+        Properties properties = YmlAndPropAndIOUtil.loadProperties(MyPluginConfig.redisConfigPath);
+        maxTotal = Integer.parseInt(YmlAndPropAndIOUtil.getValue(properties,"redis.max.total","5"));
+        maxIdle = Integer.parseInt(YmlAndPropAndIOUtil.getValue(properties,"redis.max.idle","3"));
+        minIdle = Integer.parseInt(YmlAndPropAndIOUtil.getValue(properties,"redis.min.idle","2"));
+        redisIp = YmlAndPropAndIOUtil.getValue(properties,"redis.ip","127.0.0.1");
+        redisPort = Integer.parseInt(YmlAndPropAndIOUtil.getValue(properties,"redis.port","6379"));
+        username = YmlAndPropAndIOUtil.getValue(properties,"redis.username");
+        password = YmlAndPropAndIOUtil.getValue(properties,"redis.password");
         initPool();
     }
     public static Jedis getJedis(){

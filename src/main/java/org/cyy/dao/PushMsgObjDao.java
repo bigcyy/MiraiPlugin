@@ -2,7 +2,7 @@ package org.cyy.dao;
 
 import org.cyy.bean.PushMsgObj;
 import org.cyy.config.MyPluginConfig;
-import org.cyy.utils.YmlAndPropUtil;
+import org.cyy.utils.YmlAndPropAndIOUtil;
 
 /**
  * @author cyy
@@ -12,7 +12,7 @@ import org.cyy.utils.YmlAndPropUtil;
 public class PushMsgObjDao {
     public PushMsgObj getPushMsgObjByFile(String groupId){
         String path = MyPluginConfig.pushMsgConfigFilePath + groupId+".yml";
-        PushMsgObj pushMsgObj = (PushMsgObj) YmlAndPropUtil.loadToObjFromPath(path, PushMsgObj.class);
+        PushMsgObj pushMsgObj = (PushMsgObj) YmlAndPropAndIOUtil.loadToObjFromPath(path, PushMsgObj.class);
         if(pushMsgObj == null){
             return null;
         }
@@ -21,6 +21,6 @@ public class PushMsgObjDao {
 
     public void updatePushMsgObjToFile(String groupId,Object obj){
         String path = MyPluginConfig.pushMsgConfigFilePath + groupId+".yml";
-        YmlAndPropUtil.saveObjToFile(path,obj);
+        YmlAndPropAndIOUtil.saveObjToFile(path,obj);
     }
 }

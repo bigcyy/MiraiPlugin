@@ -4,12 +4,9 @@ import net.mamoe.mirai.console.command.CommandManager;
 import net.mamoe.mirai.console.command.CommandSenderOnMessage;
 import net.mamoe.mirai.console.command.FriendCommandSenderOnMessage;
 import net.mamoe.mirai.contact.*;
-import net.mamoe.mirai.contact.file.AbsoluteFile;
 import net.mamoe.mirai.event.events.FriendMessageEvent;
 import net.mamoe.mirai.message.MessageReceipt;
 import net.mamoe.mirai.message.data.*;
-import net.mamoe.mirai.utils.ExternalResource;
-import okhttp3.*;
 import org.cyy.Plugin;
 import org.cyy.bean.PushMsgObj;
 import org.cyy.config.MyPluginConfig;
@@ -26,15 +23,12 @@ import org.cyy.service.LoginService;
 import org.cyy.service.PushMsgService;
 import org.cyy.service.SignService;
 import org.cyy.utils.PushMsg;
-import org.cyy.utils.YmlAndPropUtil;
-import org.jetbrains.annotations.NotNull;
+import org.cyy.utils.YmlAndPropAndIOUtil;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.*;
-import java.util.stream.Stream;
 
 /**
  * @author cyy
@@ -518,5 +512,15 @@ public class SecondEventHandler {
         //subject.sendMessage(new At(from.getId()).plus(ReplyMessage.useMethodMsg));
         subject.sendMessage(msg);
     }
+
+    /**
+     * 根据id清除配置文件
+     * @param id 群或者好友的id
+     */
+    public void cleanConfig(long id) {
+        YmlAndPropAndIOUtil.deleteFileByFilePattern(MyPluginConfig.pushMsgConfigFilePath,String.valueOf(id));
+        YmlAndPropAndIOUtil.deleteFileByFilePattern(MyPluginConfig.signConfigFilePath,String.valueOf(id));
+    }
+
 
 }

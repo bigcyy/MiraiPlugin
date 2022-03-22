@@ -303,4 +303,27 @@ public class BaseEventHandler extends SimpleListenerHost {
         Contact subject = botNudgedEvent.getSubject();
         secondEventHandler.showUseMethod(subject,ReplyMessage.newUseMethodMsg);
     }
+
+    /**
+     * mirai事件:机器人退出群（主动和被动退群）时触发
+     *      功能:
+     *          清除所退出群的催签到和信息推送配置文件
+     * @param  botLeaveEvent 机器人离开群事件
+     */
+    @EventHandler
+    public void onBotLeaveEvent(BotLeaveEvent botLeaveEvent){
+        long id = botLeaveEvent.getGroup().getId();
+        secondEventHandler.cleanConfig(id);
+    }
+    /**
+     * mirai事件:机器人删除朋友（主动和被动删除）时触发
+     *      功能:
+     *          清除所退出群的催签到和信息推送配置文件
+     * @param  friendDeleteEvent 机器人删除好友事件
+     */
+    @EventHandler
+    public void onFriendDelete(FriendDeleteEvent friendDeleteEvent){
+        long id = friendDeleteEvent.getFriend().getId();
+        secondEventHandler.cleanConfig(id);
+    }
 }

@@ -2,7 +2,7 @@ package org.cyy.dao;
 
 import org.cyy.bean.QueryAccount;
 import org.cyy.exception.GroupFileNotFindException;
-import org.cyy.utils.YmlAndPropUtil;
+import org.cyy.utils.YmlAndPropAndIOUtil;
 
 import java.util.Properties;
 
@@ -16,7 +16,7 @@ public class QueryAccountDao {
      */
     public QueryAccount getQueryAccountByFile(String groupNo) throws GroupFileNotFindException {
         QueryAccount queryAccount = new QueryAccount();
-        Properties properties = YmlAndPropUtil.loadProperties("group/" + groupNo + ".properties");
+        Properties properties = YmlAndPropAndIOUtil.loadProperties("group/" + groupNo + ".properties");
         //如果配置文件不存在直接返回null
         if (properties == null) {
             throw new GroupFileNotFindException();
@@ -47,12 +47,12 @@ public class QueryAccountDao {
     public void updateLoginCookie(String groupId,String loginCookie) throws GroupFileNotFindException {
         String path = "group/" + groupId + ".properties";
         //读取文件
-        Properties p = YmlAndPropUtil.loadProperties(path);
+        Properties p = YmlAndPropAndIOUtil.loadProperties(path);
         if(p==null){
             throw new GroupFileNotFindException();
         }
         //设置cookie保存文件
-        YmlAndPropUtil.saveProperties(p,"loginCookie",loginCookie,path);
+        YmlAndPropAndIOUtil.saveProperties(p,"loginCookie",loginCookie,path);
     }
 
     /**
@@ -66,7 +66,7 @@ public class QueryAccountDao {
 
         QueryAccount queryAccount = new QueryAccount();
         //加载文件
-        Properties prop = YmlAndPropUtil.loadProperties("group/" + groupNo + ".properties");
+        Properties prop = YmlAndPropAndIOUtil.loadProperties("group/" + groupNo + ".properties");
         if(prop == null){
             throw new GroupFileNotFindException();
         }

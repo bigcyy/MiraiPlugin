@@ -3,7 +3,7 @@ package org.cyy.commend;
 import net.mamoe.mirai.console.command.CommandSender;
 import net.mamoe.mirai.console.command.java.JSimpleCommand;
 import org.cyy.Plugin;
-import org.cyy.utils.YmlAndPropUtil;
+import org.cyy.utils.YmlAndPropAndIOUtil;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -47,7 +47,7 @@ public final class MyCommendCheck extends JSimpleCommand {
         } catch (Exception e) {
             sender.getSubject().sendMessage(e.getMessage());
         } finally {
-            YmlAndPropUtil.closeResource(is,null);
+            YmlAndPropAndIOUtil.closeResource(is,null);
         }
     }
 }

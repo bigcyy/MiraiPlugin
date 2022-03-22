@@ -1,6 +1,6 @@
 package org.cyy.config;
 
-import org.cyy.utils.YmlAndPropUtil;
+import org.cyy.utils.YmlAndPropAndIOUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,6 +19,7 @@ public class MyPluginConfig {
     public static String redisConfigPath = "base/redis.properties";
     public static String pluginConfigPath = "base/pluginConfig.properties";
     public static String pushMsgConfigFilePath = "group/push/";    //推送信息配置文件夹路径
+    public static String signConfigFilePath = "group/";  //催签到配置文件路径
 
     /*
         redis，或者map的key
@@ -66,44 +67,44 @@ public class MyPluginConfig {
      */
     public static void load(){
         loadBeforeCreateFile();
-        Properties properties = YmlAndPropUtil.loadProperties(MyPluginConfig.pluginConfigPath);
-        baseCookie = YmlAndPropUtil.getValue(properties, "baseCookie");
-        isAutoSign = Boolean.parseBoolean(YmlAndPropUtil.getValue(properties, "isAutoSign","false"));
-        isSign = Boolean.parseBoolean(YmlAndPropUtil.getValue(properties, "isSign","false"));
-        isPushMsg = Boolean.parseBoolean(YmlAndPropUtil.getValue(properties, "isPushMsg","false"));
-        isLogin = Boolean.parseBoolean(YmlAndPropUtil.getValue(properties, "isLogin","false"));
-        agreeAddFriend = Boolean.parseBoolean(YmlAndPropUtil.getValue(properties,"agreeAddFriend","false"));
-        agreeAddGroup = Boolean.parseBoolean(YmlAndPropUtil.getValue(properties,"agreeAddGroup","false"));
-        master = Long.valueOf(YmlAndPropUtil.getValue(properties,"maser","1597081640"));
+        Properties properties = YmlAndPropAndIOUtil.loadProperties(MyPluginConfig.pluginConfigPath);
+        baseCookie = YmlAndPropAndIOUtil.getValue(properties, "baseCookie");
+        isAutoSign = Boolean.parseBoolean(YmlAndPropAndIOUtil.getValue(properties, "isAutoSign","false"));
+        isSign = Boolean.parseBoolean(YmlAndPropAndIOUtil.getValue(properties, "isSign","false"));
+        isPushMsg = Boolean.parseBoolean(YmlAndPropAndIOUtil.getValue(properties, "isPushMsg","false"));
+        isLogin = Boolean.parseBoolean(YmlAndPropAndIOUtil.getValue(properties, "isLogin","false"));
+        agreeAddFriend = Boolean.parseBoolean(YmlAndPropAndIOUtil.getValue(properties,"agreeAddFriend","false"));
+        agreeAddGroup = Boolean.parseBoolean(YmlAndPropAndIOUtil.getValue(properties,"agreeAddGroup","false"));
+        master = Long.valueOf(YmlAndPropAndIOUtil.getValue(properties,"maser","1597081640"));
     }
 
     public static void saveBaseCookieToFile(){
-        Properties properties = YmlAndPropUtil.loadProperties(MyPluginConfig.pluginConfigPath);
-        YmlAndPropUtil.saveProperties(properties,"baseCookie",baseCookie, MyPluginConfig.pluginConfigPath);
+        Properties properties = YmlAndPropAndIOUtil.loadProperties(MyPluginConfig.pluginConfigPath);
+        YmlAndPropAndIOUtil.saveProperties(properties,"baseCookie",baseCookie, MyPluginConfig.pluginConfigPath);
     }
     public static void saveIsAutoSignToFile(){
-        Properties properties = YmlAndPropUtil.loadProperties(MyPluginConfig.pluginConfigPath);
-        YmlAndPropUtil.saveProperties(properties,"isAutoSign", String.valueOf(isAutoSign), MyPluginConfig.pluginConfigPath);
+        Properties properties = YmlAndPropAndIOUtil.loadProperties(MyPluginConfig.pluginConfigPath);
+        YmlAndPropAndIOUtil.saveProperties(properties,"isAutoSign", String.valueOf(isAutoSign), MyPluginConfig.pluginConfigPath);
     }
     public static void saveIsSignToFile(){
-        Properties properties = YmlAndPropUtil.loadProperties(MyPluginConfig.pluginConfigPath);
-        YmlAndPropUtil.saveProperties(properties,"isSign", String.valueOf(isSign), MyPluginConfig.pluginConfigPath);
+        Properties properties = YmlAndPropAndIOUtil.loadProperties(MyPluginConfig.pluginConfigPath);
+        YmlAndPropAndIOUtil.saveProperties(properties,"isSign", String.valueOf(isSign), MyPluginConfig.pluginConfigPath);
     }
     public static void saveIsLoginToFile(){
-        Properties properties = YmlAndPropUtil.loadProperties(MyPluginConfig.pluginConfigPath);
-        YmlAndPropUtil.saveProperties(properties,"isLogin", String.valueOf(isLogin), MyPluginConfig.pluginConfigPath);
+        Properties properties = YmlAndPropAndIOUtil.loadProperties(MyPluginConfig.pluginConfigPath);
+        YmlAndPropAndIOUtil.saveProperties(properties,"isLogin", String.valueOf(isLogin), MyPluginConfig.pluginConfigPath);
     }
     public static void saveIsPushMsgToFile(){
-        Properties properties = YmlAndPropUtil.loadProperties(MyPluginConfig.pluginConfigPath);
-        YmlAndPropUtil.saveProperties(properties,"isPushMsg", String.valueOf(isPushMsg), MyPluginConfig.pluginConfigPath);
+        Properties properties = YmlAndPropAndIOUtil.loadProperties(MyPluginConfig.pluginConfigPath);
+        YmlAndPropAndIOUtil.saveProperties(properties,"isPushMsg", String.valueOf(isPushMsg), MyPluginConfig.pluginConfigPath);
     }
     public static void saveAgreeAddFriendToFile(){
-        Properties properties = YmlAndPropUtil.loadProperties(MyPluginConfig.pluginConfigPath);
-        YmlAndPropUtil.saveProperties(properties,"agreeAddFriend", String.valueOf(agreeAddFriend), MyPluginConfig.pluginConfigPath);
+        Properties properties = YmlAndPropAndIOUtil.loadProperties(MyPluginConfig.pluginConfigPath);
+        YmlAndPropAndIOUtil.saveProperties(properties,"agreeAddFriend", String.valueOf(agreeAddFriend), MyPluginConfig.pluginConfigPath);
     }
     public static void saveAgreeAddGroupToFile(){
-        Properties properties = YmlAndPropUtil.loadProperties(MyPluginConfig.pluginConfigPath);
-        YmlAndPropUtil.saveProperties(properties,"agreeAddGroup", String.valueOf(agreeAddGroup), MyPluginConfig.pluginConfigPath);
+        Properties properties = YmlAndPropAndIOUtil.loadProperties(MyPluginConfig.pluginConfigPath);
+        YmlAndPropAndIOUtil.saveProperties(properties,"agreeAddGroup", String.valueOf(agreeAddGroup), MyPluginConfig.pluginConfigPath);
     }
 
 

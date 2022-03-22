@@ -4,7 +4,9 @@ import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
 import java.io.*;
+import java.util.Arrays;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Properties;
 
 /**
@@ -12,7 +14,7 @@ import java.util.Properties;
  * @date 2022/2/20 13:47
  * @description
  */
-public class YmlAndPropUtil {
+public class YmlAndPropAndIOUtil {
     /**
      * 将yaml文件转为map
      * @param path  路径
@@ -113,7 +115,7 @@ public class YmlAndPropUtil {
         }catch (Exception e){
             e.printStackTrace();
         }finally {
-            YmlAndPropUtil.closeResource(is,null);
+            YmlAndPropAndIOUtil.closeResource(is,null);
         }
         return properties;
     }
@@ -134,7 +136,7 @@ public class YmlAndPropUtil {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            YmlAndPropUtil.closeResource(null, out);
+            YmlAndPropAndIOUtil.closeResource(null, out);
         }
     }
 
@@ -147,7 +149,7 @@ public class YmlAndPropUtil {
      * @return value，如果不存在这样的key返回null
      */
     public static String getValue(String path,String key) {
-        Properties properties = YmlAndPropUtil.loadProperties(path);
+        Properties properties = YmlAndPropAndIOUtil.loadProperties(path);
         return properties.getProperty(key);
     }
 
@@ -171,6 +173,20 @@ public class YmlAndPropUtil {
     public static String getValue(Properties properties,String key,String defaultValue) {
         String value = properties.getProperty(key);
         return value == null?defaultValue:value;
+    }
+
+    /**
+     * 传入文件夹目录和要匹配该目录下的文件的模式串，根据模式串匹配文件并删除
+     * @param path 目录
+     * @param pattern 模式串
+     */
+    public static void deleteFileByFilePattern(String path,String pattern){
+        File file = new File(path);
+        if(file.isDirectory()){
+            Arrays.stream(Objects.requireNonNull(file.listFiles()))
+                    .filter((tempFile)-> tempFile.getName().contains(pattern))
+                    .forEach(File::delete);
+        }
     }
 
 }

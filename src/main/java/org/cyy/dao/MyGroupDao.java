@@ -4,7 +4,7 @@ import org.cyy.bean.MyGroup;
 import org.cyy.bean.QueryAccount;
 import org.cyy.bean.QueryObject;
 import org.cyy.exception.GroupFileNotFindException;
-import org.cyy.utils.YmlAndPropUtil;
+import org.cyy.utils.YmlAndPropAndIOUtil;
 
 import java.util.ArrayList;
 import java.util.Properties;
@@ -19,7 +19,7 @@ public class MyGroupDao {
      */
     public MyGroup getMyGroupByFile(String qun) throws GroupFileNotFindException {
 
-        Properties prop = YmlAndPropUtil.loadProperties("group/"+qun+".properties");
+        Properties prop = YmlAndPropAndIOUtil.loadProperties("group/"+qun+".properties");
         //如果文件不存在直接返回null
         if(prop == null){
             throw new GroupFileNotFindException();
@@ -56,7 +56,7 @@ public class MyGroupDao {
      */
     public String queryCollegeNoByFile(String qun) throws GroupFileNotFindException {
         String fileName = "group/"+qun+".properties";
-        Properties prop = YmlAndPropUtil.loadProperties(fileName);
+        Properties prop = YmlAndPropAndIOUtil.loadProperties(fileName);
         if(prop== null){
             throw new GroupFileNotFindException();
         }

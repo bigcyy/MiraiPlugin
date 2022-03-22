@@ -67,9 +67,10 @@ public interface ReplyMessage {
             "  ○ 查看文件内容命令:/查看文件 文件夹 文件\n" +
             "  ○ 删除文件夹命令:/删除文件夹 文件\n" +
             "  ○ 删除文件命令:/删除文件 文件夹 文件\n" +
-            "  ○ 通知命令:/通知 通知内容" +
+            "  ○ 通知命令:/通知 通知内容\n" +
             "最后:(强烈建议点此阅读文档:1.https://www.yuque.com/docs/share/a45dcbdf-2e68-46f1-bb18-87b25180cc8f?#\n" +
-            "或者\n2.https://bigcyy.github.io/2022/03/15/CYY%E6%9C%BA%E5%99%A8%E4%BA%BA%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D/)";
+            "或者\n" +
+            "2.https://bigcyy.github.io/2022/03/15/CYY%E6%9C%BA%E5%99%A8%E4%BA%BA%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D/)";
     String signUseMethodMsg = "催签到功能介绍\n" +
             "\n" +
             "面向对象：成都师范学院希望自动催签到的用户\n" +

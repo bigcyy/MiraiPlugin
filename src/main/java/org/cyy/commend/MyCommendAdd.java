@@ -3,7 +3,7 @@ package org.cyy.commend;
 import net.mamoe.mirai.console.command.CommandSender;
 import net.mamoe.mirai.console.command.java.JSimpleCommand;
 import org.cyy.Plugin;
-import org.cyy.utils.YmlAndPropUtil;
+import org.cyy.utils.YmlAndPropAndIOUtil;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -34,7 +34,7 @@ public final class MyCommendAdd extends JSimpleCommand {
                     }
                 }
                 String[] str = message.split("=");
-                Properties p = YmlAndPropUtil.loadProperties(filePath + "/" + id + ".properties");
+                Properties p = YmlAndPropAndIOUtil.loadProperties(filePath + "/" + id + ".properties");
 
                 p.setProperty(str[0], str[1]);
 
@@ -49,7 +49,7 @@ public final class MyCommendAdd extends JSimpleCommand {
             }catch (Exception e){
                 sender.getSubject().sendMessage(e.getMessage());
             }finally {
-                YmlAndPropUtil.closeResource(null,out);
+                YmlAndPropAndIOUtil.closeResource(null,out);
             }
         }
 }
