@@ -17,7 +17,7 @@ public final class MyCommendCheck extends JSimpleCommand {
     public static final MyCommendCheck INSTANCE = new MyCommendCheck();
 
     private MyCommendCheck() {
-        super(Plugin.INSTANCE, "check", new String[]{"查看"}, Plugin.INSTANCE.getParentPermission());
+        super(Plugin.INSTANCE, "check", new String[]{"查看文件"}, Plugin.INSTANCE.getParentPermission());
         this.setDescription("这是查看文件命令");
     }
 
