@@ -1,6 +1,7 @@
 package org.cyy.dao;
 
 import org.cyy.bean.QueryAccount;
+import org.cyy.config.MyPluginConfig;
 import org.cyy.exception.GroupFileNotFindException;
 import org.cyy.utils.YmlAndPropAndIOUtil;
 
@@ -51,6 +52,7 @@ public class QueryAccountDao {
         if(p==null){
             throw new GroupFileNotFindException();
         }
+        loginCookie = MyPluginConfig.baseCookie+" "+loginCookie;
         //设置cookie保存文件
         YmlAndPropAndIOUtil.saveProperties(p,"loginCookie",loginCookie,path);
     }
