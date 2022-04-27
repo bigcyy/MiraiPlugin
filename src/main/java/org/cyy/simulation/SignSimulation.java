@@ -3,6 +3,7 @@ package org.cyy.simulation;
 import okhttp3.*;
 import org.cyy.bean.QueryAccount;
 import org.cyy.bean.QueryObject;
+import org.cyy.config.MyPluginConfig;
 import org.cyy.exception.AuthIsNullException;
 import org.jetbrains.annotations.NotNull;
 
@@ -40,7 +41,7 @@ public class SignSimulation {
                 .url(url)
                 .addHeader("authorization", queryAccount.getAuthorization())
                 .build();
-        System.out.println(queryAccount.getAuthorization());
+        //System.out.println(queryAccount.getAuthorization());
         Response response = client.newCall(request).execute();
 
         String result = Objects.requireNonNull(response.body()).string();

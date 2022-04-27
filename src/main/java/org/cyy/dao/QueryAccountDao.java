@@ -52,7 +52,7 @@ public class QueryAccountDao {
         if(p==null){
             throw new GroupFileNotFindException();
         }
-        loginCookie = MyPluginConfig.baseCookie+" "+loginCookie;
+        loginCookie = MyPluginConfig.baseCookie+";"+loginCookie;
         //设置cookie保存文件
         YmlAndPropAndIOUtil.saveProperties(p,"loginCookie",loginCookie,path);
     }
