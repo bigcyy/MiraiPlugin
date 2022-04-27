@@ -47,7 +47,7 @@ public class SignService {
         String authorization = simulationRequest.getAuthorization(queryAccount);
         //设置验证，以便于后面获取未签到名单时使用
         queryAccount.setAuthorization(authorization);
-        int status = 1;//需要查询的状态
+        int status = 2;//需要查询的状态
         List<String> list = simulationRequest.getNameByStatus(queryAccount, myGroup.getQueryObjectList(), status);
         int count = 0;
         //名单中没有人，表明全部完成签到

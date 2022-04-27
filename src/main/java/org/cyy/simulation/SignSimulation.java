@@ -40,7 +40,7 @@ public class SignSimulation {
                 .url(url)
                 .addHeader("authorization", queryAccount.getAuthorization())
                 .build();
-
+        System.out.println(queryAccount.getAuthorization());
         Response response = client.newCall(request).execute();
 
         String result = Objects.requireNonNull(response.body()).string();

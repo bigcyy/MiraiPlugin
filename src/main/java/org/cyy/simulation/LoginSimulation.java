@@ -89,6 +89,7 @@ public class LoginSimulation {
      * @throws IOException 抛出该异常，说明请求出错（无需处理）
      * @throws BaseCookieIsErrorException 抛出该异常表示baseCookie不存在或者已经过期
      */
+    //todo 修登录bug
     public String getLoginResubmitFlag(String baseCookie) throws IOException, BaseCookieIsErrorException {
         if(baseCookie == null){
             throw new BaseCookieIsErrorException();
