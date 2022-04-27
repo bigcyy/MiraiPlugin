@@ -19,7 +19,7 @@ public final class Plugin extends JavaPlugin {
     public static Map<String,Object> contextMap = new HashMap<>();    //应用上下文，用于存储全局配置
 
     private Plugin() {
-        super(new JvmPluginDescriptionBuilder("org.cyy.sign-push", "1.0")
+        super(new JvmPluginDescriptionBuilder("org.cyy.sign-push", "1.0.1")
                 .name("推送助手")
                 .author("cyy")
                 .build());
