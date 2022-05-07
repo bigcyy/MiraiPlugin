@@ -17,6 +17,7 @@ import org.cyy.simulation.SignSimulation;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author cyy
@@ -320,41 +321,30 @@ public class SignService {
     }
 
     /**
-     * 选择出正确的at对象
-     * @param qqName qq昵称
+     * 选择出正确的at对象,通过真实名字对所有同学的真实名字进行筛选，选出包含了子名字但不等于自己的所有名字，
+     * 用结果移除qq群昵称的对应成员，再用子名字选出正确的目标
+     * @param realName qq昵称
      * @param atAimList at目标集合
-     * @param allList 所有查询到的集合
+     * @param allRealName 所有查询到的集合
      * @return 一个at目标
      */
-    private NormalMember selectTrueAtAim(String qqName, ArrayList<NormalMember> atAimList, ArrayList<String> allList) {
+    private NormalMember selectTrueAtAim(String realName, ArrayList<NormalMember> atAimList, ArrayList<String> allRealName) {
 
         //筛选出含有特定子串（名字）的字符串（名字）
-        for (int i = 0; i < allList.size(); i++) {
-            if(!qqName.contains(allList.get(i))){
-                allList.remove(i);
-            }
-        }
-        //对其进行排序
-        Collections.sort(allList, new Comparator<String>() {
-            @Override
-            public int compare(String o1, String o2) {
-                return o2.length() - o1.length();
-            }
-        });
+        List<String> collect = allRealName.stream()
+                .filter((name) -> !realName.equals(name) && name.contains(realName))
+                .collect(Collectors.toList());
 
-        for (int i = 0; i < allList.size(); i++) {
-            System.out.println(allList.get(i));
-        }
         //对atAimList进行筛选
-        for (int i = 0; i < allList.size(); i++) {
-            for (int j = 0; j < atAimList.size(); j++) {
-                if(atAimList.get(j).getNameCard().contains(allList.get(i))){
-                    atAimList.remove(j);
-                    break;
+
+        for(String o : collect){
+            for(NormalMember atAim:atAimList){
+                if(!atAim.getNameCard().contains(o)){
+                    return atAim;
                 }
             }
         }
-        return atAimList.get(0);
+        return null;
     }
 
     /**
