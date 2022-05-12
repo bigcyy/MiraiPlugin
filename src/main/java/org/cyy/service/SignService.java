@@ -123,7 +123,10 @@ public class SignService {
      * @return 一个at目标
      */
     private NormalMember selectTrueAtAim(String realName, ArrayList<NormalMember> atAimList, List<String> allRealName) {
-
+        System.out.println("realName:"+realName);
+        for(NormalMember atAim:atAimList){
+            System.out.println(atAim.getNameCard());
+        }
         //筛选出含有特定子串（名字）的字符串（名字）
         List<String> collect = allRealName.stream()
                 .filter((name) -> !realName.equals(name) && name.contains(realName))
