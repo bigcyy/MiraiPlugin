@@ -87,11 +87,11 @@ public class SignService {
                 unSuccessAtName.append(name).append(" ");
             }else if(atAimList.size() > 1){
                 //如果at目标大于1，则为重名或者名字包含关系（陈红，陈红燕，“陈红燕”包含了“陈红”，contain判断都会为true）这类情况
-                List<String> signList = simulationRequest.getNameByStatus(queryAccount,myGroup.getQueryObjectList(),(status==2?1:2));
-                //已经签到的集合加上未签到的为总的
-                //未签到集合与签到集合合并为总名称表
+                List<String> signList = simulationRequest.getNameByStatus(queryAccount,myGroup.getQueryObjectList(),(status==2?1:2));   //获取已经签到的同学的名单
+                //已经签到的集合加上未签到的为总的名单
+                //未签到集合与签到集合合并为总名单
                 signList.addAll(list);
-                NormalMember normalMember = selectTrueAtAim(qqName, atAimList, (ArrayList<String>) signList);
+                NormalMember normalMember = selectTrueAtAim(name, atAimList, signList);
                 at = new At(normalMember.getId());
                 builder = builder.append(at);
                 count++;
@@ -112,6 +112,32 @@ public class SignService {
         //messages.add(timeText);
 
         return messages;
+    }
+
+    /**
+     * 选择出正确的at对象,通过真实名字对所有同学的真实名字进行筛选，选出包含了子名字但不等于自己的所有名字，
+     * 用结果移除qq群昵称的对应成员，再用子名字选出正确的目标
+     * @param realName 待at的真实姓名
+     * @param atAimList at目标集合
+     * @param allRealName 所有人名单
+     * @return 一个at目标
+     */
+    private NormalMember selectTrueAtAim(String realName, ArrayList<NormalMember> atAimList, List<String> allRealName) {
+
+        //筛选出含有特定子串（名字）的字符串（名字）
+        List<String> collect = allRealName.stream()
+                .filter((name) -> !realName.equals(name) && name.contains(realName))
+                .collect(Collectors.toList());
+
+        //对atAimList进行筛选
+        for(String o : collect){
+            for(NormalMember atAim:atAimList){
+                if(!atAim.getNameCard().contains(o)){
+                    return atAim;
+                }
+            }
+        }
+        return null;
     }
 
     @Deprecated
@@ -318,33 +344,6 @@ public class SignService {
         }
         message.add(new PlainText(ReplyMessage.cacheIsOk));     //构造缓存成功的信息
         return message; //返回信息集合
-    }
-
-    /**
-     * 选择出正确的at对象,通过真实名字对所有同学的真实名字进行筛选，选出包含了子名字但不等于自己的所有名字，
-     * 用结果移除qq群昵称的对应成员，再用子名字选出正确的目标
-     * @param realName qq昵称
-     * @param atAimList at目标集合
-     * @param allRealName 所有查询到的集合
-     * @return 一个at目标
-     */
-    private NormalMember selectTrueAtAim(String realName, ArrayList<NormalMember> atAimList, ArrayList<String> allRealName) {
-
-        //筛选出含有特定子串（名字）的字符串（名字）
-        List<String> collect = allRealName.stream()
-                .filter((name) -> !realName.equals(name) && name.contains(realName))
-                .collect(Collectors.toList());
-
-        //对atAimList进行筛选
-
-        for(String o : collect){
-            for(NormalMember atAim:atAimList){
-                if(!atAim.getNameCard().contains(o)){
-                    return atAim;
-                }
-            }
-        }
-        return null;
     }
 
     /**
