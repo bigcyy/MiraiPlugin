@@ -20,8 +20,6 @@ public final class Plugin extends JavaPlugin {
 
     private Plugin() {
 
-        //todo 未添加推送子群或好友at全体成员查找文件报错
-        //todo 19级手抖催签到下标越界
         super(new JvmPluginDescriptionBuilder("org.cyy.sign-push", "1.0.2")
                 .name("推送助手")
                 .author("cyy")
