@@ -20,7 +20,7 @@ public final class Plugin extends JavaPlugin {
 
     private Plugin() {
 
-        super(new JvmPluginDescriptionBuilder("org.cyy.sign-push", "1.0.2")
+        super(new JvmPluginDescriptionBuilder("org.cyy.sign-push", "1.0.3")
                 .name("推送助手")
                 .author("cyy")
                 .build());

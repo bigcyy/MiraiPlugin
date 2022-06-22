@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "org.cyy"
-version = "1.0"
+version = "1.0.3"
 
 repositories {
     maven("https://maven.aliyun.com/repository/public")
