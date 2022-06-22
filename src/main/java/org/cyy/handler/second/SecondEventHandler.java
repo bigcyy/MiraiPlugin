@@ -229,35 +229,6 @@ public class SecondEventHandler {
         sender.sendMessage("ok");
     }
 
-    /**
-     *
-     * 更新群昵称和健康系统姓名的映射，并存储到redis中
-     * @param group 待更新的群
-     * @param content 触发信息
-     */
-    public void updateGroupToRedis(Group group, String content) {
-        try {
-            SignService signService = new SignService();
-            ArrayList<Message>  messages = new ArrayList<>();
-            if(content.contains("redis")){
-                messages = signService.updateGroupToRedis(group);
-            }else if(content.contains("cache")){
-                messages = signService.updateGroupToCache(group);
-            }
-            for(Message message:messages){
-                group.sendMessage(message);
-            }
-        }catch (IOException ioException){
-            group.sendMessage(ReplyMessage.ioExceptionMsg);
-            ioException.printStackTrace();
-        }catch (AuthIsNullException authIsNullException) {
-            group.sendMessage(ReplyMessage.authExceptionMsg);
-            authIsNullException.printStackTrace();
-        } catch (GroupFileNotFindException groupFileNotFindException) {
-            groupFileNotFindException.printStackTrace();
-
-        }
-    }
 
     /**
      * at全体成员时推送信息给子群的处理

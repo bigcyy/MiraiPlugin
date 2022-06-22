@@ -30,7 +30,7 @@ public class LoginSimulation {
      */
     @Deprecated
     public String getBaseCookie() throws IOException {
-        String url = "http://spcp.cdnu.zovecenter.com/Sys/";
+        String url = "http://xg.cdnu.edu.cn/SPCP/Sys/";
         Request request = new Request.Builder()
                 .url(url)
                 .build();
@@ -56,7 +56,8 @@ public class LoginSimulation {
      * @throws IOException  该异常无需处理
      */
     public String submitLoginForm(QueryAccount queryAccount, String baseCookie, String resubmitFlag, String code) throws IOException {
-        String url = "http://spcp.cdnu.zovecenter.com/Web/Account/TLogin";
+
+        String url = "http://xg.cdnu.edu.cn/SPCP/Web/Account/TLogin";
         RequestBody requestBody = new FormBody.Builder()
                 .add("ReSubmitFlag",resubmitFlag)
                 .add("txtUid",queryAccount.getUsername())
@@ -93,7 +94,7 @@ public class LoginSimulation {
         if(baseCookie == null){
             throw new BaseCookieIsErrorException();
         }
-        String url = "http://spcp.cdnu.zovecenter.com/Web/Account/TLogin";
+        String url = "http://xg.cdnu.edu.cn/SPCP/Web/Account/TLogin";
         Request request = new Request.Builder()
                 .url(url)
                 .addHeader("Cookie",baseCookie)
@@ -118,7 +119,7 @@ public class LoginSimulation {
      * @param group qq群对象，用于发送验证码图片
      */
     public void getAndSendCode(String baseCookie, Group group){
-        String url = "http://spcp.cdnu.zovecenter.com/Web/Account/GetLoginVCode?dt="+new Date().getTime();
+        String url = "http://xg.cdnu.edu.cn/SPCP/Web/Account/GetLoginVCode?dt="+new Date().getTime();
         Request request = new Request.Builder()
                 .url(url)
                 .addHeader("Cookie",baseCookie)

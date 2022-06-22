@@ -1,6 +1,11 @@
 package org.cyy.simulation;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import okhttp3.*;
+import org.cyy.bean.PersonModel;
 import org.cyy.bean.QueryAccount;
 import org.cyy.bean.QueryObject;
 import org.cyy.config.MyPluginConfig;
@@ -22,7 +27,7 @@ import java.util.regex.Pattern;
  */
 public class SignSimulation {
     private final OkHttpClient client = SingleOkHttpClient.getInstance();
-    private final String baseUrl = "http://spcp.cdnu.zovecenter.com/FYPhone/PhoneApi/api/Health/GetDCStuReseltWebList?topId=&inputDate=&stuId=&stuName=&status=%s&collegeNo=%s&specialtyNo=%s&classNo=%s&speGrade=%s&fdyName=&pageIndex=";
+    private final String baseUrl = "http://xg.cdnu.edu.cn/SPCP/PhoneApi/api/Health/GetDCStuReseltWebList?topId=&inputDate=&stuId=&stuName=&status=%s&collegeNo=%s&specialtyNo=%s&classNo=%s&speGrade=%s&fdyName=&pageIndex=";
 
     /**
      * 根据传入的queryObject,生成url，发送请求获取名单的总页数
@@ -65,11 +70,12 @@ public class SignSimulation {
      * @return 查询到的名单
      * @throws IOException 发送请求异常
      */
-    public List<String> getNameByStatus(QueryAccount queryAccount,ArrayList<QueryObject> queryObjects , int status) throws IOException {
+    public List<PersonModel> getNameByStatus(QueryAccount queryAccount,ArrayList<QueryObject> queryObjects , int status) throws IOException {
         List<String> list = new ArrayList<>();      //记录总名单
+        List<PersonModel> personModelList= new ArrayList<>();
         //long begin = System.currentTimeMillis();    //开始时间
         int allPage;    //记录总页数
-        //取出群里的每个催签到查询对象(专业)，获取每个对象未签到的名单
+        //取出群里的每个催签到查询对象(专业)，获取每个专业未签到的名单
         for (QueryObject queryObject : queryObjects) {
             allPage = getAllPage(queryAccount, queryObject,status);   //获取所有页
             //System.out.println(allPage);
@@ -96,6 +102,20 @@ public class SignSimulation {
                         public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                             String result = Objects.requireNonNull(response.body()).string();
                             response.close();
+
+                            Gson gson = new Gson();
+                            String regex1 = "\"Items\":(.*?),\"Context\"";
+                            Pattern p1 = Pattern.compile(regex1);
+                            Matcher matcher1 = p1.matcher(result);
+
+                            while (matcher1.find()) {
+                                JsonArray jsonElements = JsonParser.parseString(matcher1.group(1)).getAsJsonArray();
+                                for(JsonElement jsonElement : jsonElements) {
+                                    PersonModel personModel = gson.fromJson(jsonElement, PersonModel.class);
+                                    personModelList.add(personModel);
+                                }
+                            }
+
                             String regex = "\"Name\":\"(.*?)\"";
                             Pattern p = Pattern.compile(regex);
                             Matcher matcher = p.matcher(result);
@@ -117,7 +137,7 @@ public class SignSimulation {
         //结束时间
 //        long end = System.currentTimeMillis();
 //        System.out.println(end-begin);
-        return list;    //返回名单
+        return personModelList;    //返回名单
     }
 
 
@@ -150,7 +170,7 @@ public class SignSimulation {
         if(cookie == null){
             throw new AuthIsNullException();
         }
-        String url = "http://spcp.cdnu.zovecenter.com/Web/Account/ChooseSys";   //请求地址
+        String url = "http://xg.cdnu.edu.cn/SPCP/Web/Account/ChooseSys";   //请求地址
         String code = "";   //接收响应返回的code
         Request request = new Request.Builder()
                 .url(url)
@@ -186,7 +206,7 @@ public class SignSimulation {
                 .add("grant_type","password")
                 .build();
         Request request = new Request.Builder()
-                .url("http://spcp.cdnu.zovecenter.com/FYPhone/PhoneApi/api/Account/Login?code=" + code)
+                .url("http://xg.cdnu.edu.cn/SPCP/PhoneApi/api/Account/Login?code=" + code)
                 .post(requestBody)
                 .header("Cookie",cookie)
                 .build();
@@ -218,7 +238,7 @@ public class SignSimulation {
                 .add("refresh_token",token)
                 .build();
         Request request = new Request.Builder()
-                .url("http://spcp.cdnu.zovecenter.com/FYPhone/PhoneApi/api/Account/Login?userType=T&collegeNo=" + collegeNo)
+                .url("http://xg.cdnu.edu.cn/SPCP/PhoneApi/api/Account/Login?userType=T&collegeNo=" + collegeNo)
                 .post(requestBody)
                 .header("Cookie",cookie)
                 .build();

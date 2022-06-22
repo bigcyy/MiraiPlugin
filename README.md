@@ -224,9 +224,9 @@ b--失败-->close
 b--成功-->得到token-->c[携带cookie,token,学院号发起post请求获取auth]
 c--失败-->close
 c--成功-->得到auth-->close
-a---url1{{url:http://spcp.cdnu.zovecenter.com/Web/Account/ChooseSys}}
-b---url2{{url:http://spcp.cdnu.zovecenter.com/FYPhone/PhoneApi/api/Account/Login?code=code}}
-c---url3{{url:http://spcp.cdnu.zovecenter.com/FYPhone/PhoneApi/api/Account/Login?userType=T&collegeNo=collegeNo}}
+a---url1{{url:http://xg.cdnu.edu.cn/SPCP/Web/Account/ChooseSys}}
+b---url2{{url:http://xg.cdnu.edu.cn/SPCP/FYPhone/PhoneApi/api/Account/Login?code=code}}
+c---url3{{url:http://xg.cdnu.edu.cn/SPCP/FYPhone/PhoneApi/api/Account/Login?userType=T&collegeNo=collegeNo}}
 ```
 
 ##### 获取名单流程图
