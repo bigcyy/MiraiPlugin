@@ -104,24 +104,18 @@ public class SignSimulation {
                             response.close();
 
                             Gson gson = new Gson();
-                            String regex1 = "\"Items\":(.*?),\"Context\"";
-                            Pattern p1 = Pattern.compile(regex1);
-                            Matcher matcher1 = p1.matcher(result);
+                            String regex = "\"Items\":(.*?),\"Context\"";
+                            Pattern p = Pattern.compile(regex);
+                            Matcher matcher = p.matcher(result);
 
-                            while (matcher1.find()) {
-                                JsonArray jsonElements = JsonParser.parseString(matcher1.group(1)).getAsJsonArray();
+                            while (matcher.find()) {
+                                JsonArray jsonElements = JsonParser.parseString(matcher.group(1)).getAsJsonArray();
                                 for(JsonElement jsonElement : jsonElements) {
                                     PersonModel personModel = gson.fromJson(jsonElement, PersonModel.class);
                                     personModelList.add(personModel);
                                 }
                             }
-
-                            String regex = "\"Name\":\"(.*?)\"";
-                            Pattern p = Pattern.compile(regex);
-                            Matcher matcher = p.matcher(result);
-                            while (matcher.find()) {
-                                list.add(matcher.group(1));
-                            }
+                            
                             counter.countDown();
                         }
                     });
