@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
  */
 public class SignSimulation {
     private final OkHttpClient client = SingleOkHttpClient.getInstance();
-    private final String baseUrl = "http://spcp.cdnu.zovecenter.com/FYPhone/PhoneApi/api/Health/GetDCStuReseltWebList?topId=&inputDate=&stuId=&stuName=&status=%s&collegeNo=%s&specialtyNo=%s&classNo=%s&speGrade=%s&fdyName=&pageIndex=";
+    private final String baseUrl = "http://xg.cdnu.edu.cn/SPCP/PhoneApi/api/Health/GetDCStuReseltWebList?topId=&inputDate=&stuId=&stuName=&status=%s&collegeNo=%s&specialtyNo=%s&classNo=%s&speGrade=%s&fdyName=&pageIndex=";
 
     /**
      * 根据传入的queryObject,生成url，发送请求获取名单的总页数
@@ -150,7 +150,7 @@ public class SignSimulation {
         if(cookie == null){
             throw new AuthIsNullException();
         }
-        String url = "http://spcp.cdnu.zovecenter.com/Web/Account/ChooseSys";   //请求地址
+        String url = "http://xg.cdnu.edu.cn/SPCP/Web/Account/ChooseSys";   //请求地址
         String code = "";   //接收响应返回的code
         Request request = new Request.Builder()
                 .url(url)
@@ -186,7 +186,7 @@ public class SignSimulation {
                 .add("grant_type","password")
                 .build();
         Request request = new Request.Builder()
-                .url("http://spcp.cdnu.zovecenter.com/FYPhone/PhoneApi/api/Account/Login?code=" + code)
+                .url("http://xg.cdnu.edu.cn/SPCP/PhoneApi/api/Account/Login?code=" + code)
                 .post(requestBody)
                 .header("Cookie",cookie)
                 .build();
@@ -218,7 +218,7 @@ public class SignSimulation {
                 .add("refresh_token",token)
                 .build();
         Request request = new Request.Builder()
-                .url("http://spcp.cdnu.zovecenter.com/FYPhone/PhoneApi/api/Account/Login?userType=T&collegeNo=" + collegeNo)
+                .url("http://xg.cdnu.edu.cn/SPCP/PhoneApi/api/Account/Login?userType=T&collegeNo=" + collegeNo)
                 .post(requestBody)
                 .header("Cookie",cookie)
                 .build();
