@@ -1,6 +1,11 @@
 package org.cyy.simulation;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import okhttp3.*;
+import org.cyy.bean.PersonModel;
 import org.cyy.bean.QueryAccount;
 import org.cyy.bean.QueryObject;
 import org.cyy.config.MyPluginConfig;
@@ -65,11 +70,12 @@ public class SignSimulation {
      * @return 查询到的名单
      * @throws IOException 发送请求异常
      */
-    public List<String> getNameByStatus(QueryAccount queryAccount,ArrayList<QueryObject> queryObjects , int status) throws IOException {
+    public List<PersonModel> getNameByStatus(QueryAccount queryAccount,ArrayList<QueryObject> queryObjects , int status) throws IOException {
         List<String> list = new ArrayList<>();      //记录总名单
+        List<PersonModel> personModelList= new ArrayList<>();
         //long begin = System.currentTimeMillis();    //开始时间
         int allPage;    //记录总页数
-        //取出群里的每个催签到查询对象(专业)，获取每个对象未签到的名单
+        //取出群里的每个催签到查询对象(专业)，获取每个专业未签到的名单
         for (QueryObject queryObject : queryObjects) {
             allPage = getAllPage(queryAccount, queryObject,status);   //获取所有页
             //System.out.println(allPage);
@@ -96,6 +102,20 @@ public class SignSimulation {
                         public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                             String result = Objects.requireNonNull(response.body()).string();
                             response.close();
+
+                            Gson gson = new Gson();
+                            String regex1 = "\"Items\":(.*?),\"Context\"";
+                            Pattern p1 = Pattern.compile(regex1);
+                            Matcher matcher1 = p1.matcher(result);
+
+                            while (matcher1.find()) {
+                                JsonArray jsonElements = JsonParser.parseString(matcher1.group(1)).getAsJsonArray();
+                                for(JsonElement jsonElement : jsonElements) {
+                                    PersonModel personModel = gson.fromJson(jsonElement, PersonModel.class);
+                                    personModelList.add(personModel);
+                                }
+                            }
+
                             String regex = "\"Name\":\"(.*?)\"";
                             Pattern p = Pattern.compile(regex);
                             Matcher matcher = p.matcher(result);
@@ -117,7 +137,7 @@ public class SignSimulation {
         //结束时间
 //        long end = System.currentTimeMillis();
 //        System.out.println(end-begin);
-        return list;    //返回名单
+        return personModelList;    //返回名单
     }
 
 
