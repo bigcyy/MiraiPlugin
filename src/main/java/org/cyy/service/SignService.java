@@ -97,9 +97,14 @@ public class SignService {
                 //未签到集合与签到集合合并为总名单
                 //signList.addAll(list);
                 NormalMember normalMember = selectTrueAtAim(studentId, atAimList);
-                at = new At(normalMember.getId());
-                builder.append(at);
-                count++;
+                if(normalMember == null){
+                    //临时解决
+                    unSuccessAtName.append(name).append(studentId).append("(学号有误) ");
+                }else {
+                    at = new At(normalMember.getId());
+                    builder.append(at);
+                    count++;
+                }
             } else {
                 at = new At(atAimList.get(0).getId());
                 builder.append(at);
@@ -127,12 +132,15 @@ public class SignService {
      * @return 一个at目标
      */
     private NormalMember selectTrueAtAim(String studentId, ArrayList<NormalMember> atAimList){
+//        System.out.println(studentId);
         AtomicReference<NormalMember> normalMember = new AtomicReference<>();
         atAimList.forEach(member -> {
+//            System.out.println(member.getNameCard());
             if(member.getNameCard().contains(studentId)){
                 normalMember.set(member);
             }
         });
+
         return normalMember.get();
     }
 

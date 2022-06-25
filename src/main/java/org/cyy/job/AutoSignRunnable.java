@@ -28,6 +28,7 @@ public class AutoSignRunnable implements Runnable{
                 .withIdentity("trigger1", "group1")
                 .startNow()//立即生效
                 .withSchedule(CronScheduleBuilder.cronSchedule("0 0 9,11,12,13,14,15 * * ?"))
+//                .withSchedule(CronScheduleBuilder.cronSchedule("0 40 0 * * ?"))
                 .build();
         //4、执行
         try {

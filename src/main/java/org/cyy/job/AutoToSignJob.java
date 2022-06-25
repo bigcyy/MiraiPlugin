@@ -19,6 +19,8 @@ import java.util.Objects;
 public class AutoToSignJob implements Job {
     @Override
     public void execute(JobExecutionContext context) {
+
+        System.out.println("--------------正在执行自动催签到任务！！！--------------------");
         //service层
         SignService signService = new SignService();
         File FileGroup = new File("group");

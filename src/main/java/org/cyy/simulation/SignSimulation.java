@@ -112,6 +112,7 @@ public class SignSimulation {
                                 JsonArray jsonElements = JsonParser.parseString(matcher.group(1)).getAsJsonArray();
                                 for(JsonElement jsonElement : jsonElements) {
                                     PersonModel personModel = gson.fromJson(jsonElement, PersonModel.class);
+//                                    System.out.println(personModel);
                                     personModelList.add(personModel);
                                 }
                             }

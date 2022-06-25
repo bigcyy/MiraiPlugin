@@ -18,7 +18,7 @@ dependencies {
     // https://mvnrepository.com/artifact/org.quartz-scheduler/quartz
     implementation("org.quartz-scheduler:quartz:2.3.2")
     // https://mvnrepository.com/artifact/org.slf4j/slf4j-simple
-    testImplementation("org.slf4j:slf4j-simple:2.0.0-alpha5")
+    implementation("org.slf4j:slf4j-simple:2.0.0-alpha5")
     // https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp
     implementation("com.squareup.okhttp3:okhttp:4.9.3")
     // https://mvnrepository.com/artifact/redis.clients/jedis
