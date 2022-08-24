@@ -15,7 +15,7 @@ import org.cyy.dao.PushMsgObjDao;
 import org.cyy.exception.AuthIsNullException;
 import org.cyy.exception.BaseCookieIsErrorException;
 import org.cyy.exception.GroupFileNotFindException;
-import org.cyy.job.AutoSignRunnable;
+import org.cyy.job.AutoSignStarter;
 import org.cyy.redis.RedisTimerListener;
 import org.cyy.redis.RedisTimerListenerRunnable;
 import org.cyy.redis.RedislUtil;
@@ -169,7 +169,7 @@ public class SecondEventHandler {
         if(msg.equals("开启自动催签到") && !MyPluginConfig.isAutoSign){
             MyPluginConfig.isAutoSign = true;
             MyPluginConfig.saveIsAutoSignToFile();
-            new Thread((new AutoSignRunnable())).start();
+            new AutoSignStarter().run();
         }else if(msg.equals("开启催签到") && !MyPluginConfig.isSign){
             MyPluginConfig.isSign = true;
             MyPluginConfig.saveIsSignToFile();

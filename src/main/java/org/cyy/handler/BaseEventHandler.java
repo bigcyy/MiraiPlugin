@@ -7,13 +7,12 @@ import net.mamoe.mirai.event.SimpleListenerHost;
 import net.mamoe.mirai.event.events.*;
 import net.mamoe.mirai.message.data.At;
 import net.mamoe.mirai.message.data.AtAll;
-import net.mamoe.mirai.message.data.Message;
 import net.mamoe.mirai.message.data.MessageChain;
 import org.cyy.Plugin;
 import org.cyy.config.MyPluginConfig;
 import org.cyy.config.ReplyMessage;
 import org.cyy.handler.second.SecondEventHandler;
-import org.cyy.job.AutoSignRunnable;
+import org.cyy.job.AutoSignStarter;
 import org.cyy.redis.RedisTimerListenerRunnable;
 import org.cyy.redis.RedislUtil;
 import org.jetbrains.annotations.NotNull;
@@ -253,7 +252,7 @@ public class BaseEventHandler extends SimpleListenerHost {
         Plugin.MY_BOT = botOnlineEvent.getBot();    //注册全局bot方便整个应用进行访问
         if(MyPluginConfig.isAutoSign) {
             //开启自动签到
-            new Thread((new AutoSignRunnable())).start();
+            new AutoSignStarter().run();
         }
         if(MyPluginConfig.isLogin) {
             //开启redis登录计时器监听器

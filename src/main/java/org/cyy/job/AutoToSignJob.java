@@ -28,6 +28,7 @@ public class AutoToSignJob implements Job {
 
         for (int i = 0; i < Objects.requireNonNull(files).length; i++) {
             String name = files[i].getName();
+            if("push".equals(name)) continue;
             String[] id = name.split("\\.");
             Group group = Plugin.MY_BOT.getGroup(Long.parseLong(id[0]));
             if(group != null){
