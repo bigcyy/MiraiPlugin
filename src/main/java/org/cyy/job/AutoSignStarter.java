@@ -26,8 +26,8 @@ public class AutoSignStarter{
         CronTrigger cronTrigger = TriggerBuilder.newTrigger()
                 .withIdentity("trigger1", "group1")
                 .startNow()//立即生效
-//                .withSchedule(CronScheduleBuilder.cronSchedule("0 0 9,11,12,13,14,15 * * ?"))
-                .withSchedule(CronScheduleBuilder.cronSchedule("0 */1 * * * ?"))
+                .withSchedule(CronScheduleBuilder.cronSchedule("0 0 9,11,12,13,14,15 * * ?"))
+//                .withSchedule(CronScheduleBuilder.cronSchedule("0 */1 * * * ?"))
                 .build();
         //4、执行
         try {
