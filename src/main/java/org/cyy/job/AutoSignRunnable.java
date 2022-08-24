@@ -20,7 +20,7 @@ public class AutoSignRunnable implements Runnable{
         } catch (SchedulerException schedulerException) {
             schedulerException.printStackTrace();
         }
-        // 2、创建JobDetail实例，并与PrintWordsJob类绑定(Job执行内容)
+        // 2、创建JobDetail实例，并与PJob类绑定(Job执行内容)
         JobDetail jobDetail = JobBuilder.newJob(AutoToSignJob.class)
                 .withIdentity("job1", "group1").build();
         // 3、创建CronTrigger实例，传入corn表达式

@@ -17,12 +17,12 @@ repositories {
 dependencies {
     // https://mvnrepository.com/artifact/org.quartz-scheduler/quartz
     implementation("org.quartz-scheduler:quartz:2.3.2")
-    // https://mvnrepository.com/artifact/org.slf4j/slf4j-simple
-    implementation("org.slf4j:slf4j-simple:2.0.0-alpha5")
+    // https://mvnrepository.com/artifact/org.slf4j/slf4j-log4j12
+    implementation("org.slf4j:slf4j-log4j12:1.7.28")
     // https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp
-    implementation("com.squareup.okhttp3:okhttp:4.9.3")
+    implementation("com.squareup.okhttp3:okhttp:4.10.0")
     // https://mvnrepository.com/artifact/redis.clients/jedis
-    implementation("redis.clients:jedis:4.1.1")
+    implementation("redis.clients:jedis:4.2.3")
     // https://mvnrepository.com/artifact/org.yaml/snakeyaml
     implementation("org.yaml:snakeyaml:1.30")
 

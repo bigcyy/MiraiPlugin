@@ -75,7 +75,7 @@ public class MyPluginConfig {
         isLogin = Boolean.parseBoolean(YmlAndPropAndIOUtil.getValue(properties, "isLogin","false"));
         agreeAddFriend = Boolean.parseBoolean(YmlAndPropAndIOUtil.getValue(properties,"agreeAddFriend","false"));
         agreeAddGroup = Boolean.parseBoolean(YmlAndPropAndIOUtil.getValue(properties,"agreeAddGroup","false"));
-        master = Long.valueOf(YmlAndPropAndIOUtil.getValue(properties,"maser","1597081640"));
+        master = Long.valueOf(YmlAndPropAndIOUtil.getValue(properties,"master","1597081640"));
     }
 
     public static void saveBaseCookieToFile(){

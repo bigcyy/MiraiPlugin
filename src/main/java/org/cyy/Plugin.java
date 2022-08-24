@@ -9,11 +9,14 @@ import org.cyy.commend.*;
 import org.cyy.config.MyPluginConfig;
 import org.cyy.handler.BaseEventHandler;
 import org.cyy.redis.RedisPool;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public final class Plugin extends JavaPlugin {
+    Logger logger = LoggerFactory.getLogger(Plugin.class);
     public static final Plugin INSTANCE = new Plugin();
     public static Bot MY_BOT;           //储存当前bot
     public static Map<String,Object> contextMap = new HashMap<>();    //应用上下文，用于存储全局配置
